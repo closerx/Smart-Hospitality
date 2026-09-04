@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Best Smart Hospitality 2 | منظومة إدارة العقارات والضيافة الذكية</title>
+    <meta name="description" content="منظومة الضيافة وإدارة وتشغيل العقارات الذكية مدعومة بقاعدة بيانات Supabase وتوثيق الحسابات برموز OTP الآمنة." />
+    <meta property="og:title" content="Best Smart Hospitality 2" />
+    <meta property="og:description" content="منظومة الضيافة وإدارة وتشغيل العقارات الذكية مدعومة بقاعدة بيانات Supabase وتوثيق الحسابات برموز OTP الآمنة." />
+    <script>
+      (function() {
+        if (typeof window === 'undefined') return;
+        function isBenignWsMsg(msg) {
+          if (!msg) return false;
+          var str = typeof msg === 'string' ? msg : (msg.message || msg.stack || String(msg));
+          return (
+            str.indexOf('WebSocket') !== -1 ||
+            str.indexOf('websocket') !== -1 ||
+            str.indexOf('WebSocket closed without opened') !== -1 ||
+            str.indexOf('failed to connect to websocket') !== -1
+          );
+        }
+        window.addEventListener('unhandledrejection', function(event) {
+          if (isBenignWsMsg(event.reason)) {
+            event.preventDefault();
+            if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+          }
+        }, true);
+        window.addEventListener('error', function(event) {
+          if (isBenignWsMsg(event.message) || isBenignWsMsg(event.error)) {
+            event.preventDefault();
+            if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+          }
+        }, true);
+        // Intercept console messages for benign HMR websocket logs from Vite client
+        ['error', 'warn', 'log'].forEach(function(level) {
+          var origFn = console[level];
+          console[level] = function() {
+            for (var i = 0; i < arguments.length; i++) {
+              if (isBenignWsMsg(arguments[i])) {
+                return;
+              }
+            }
+            origFn.apply(console, arguments);
+          };
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

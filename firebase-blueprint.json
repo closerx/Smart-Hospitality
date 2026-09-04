@@ -1,0 +1,139 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Unified authentication metadata and lookup document for all users.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique Firebase Auth UID." },
+        "email": { "type": "string", "format": "email", "description": "Email address of the user." },
+        "fullName": { "type": "string", "description": "Full name of the user." },
+        "phone": { "type": "string", "description": "Saudi phone number." },
+        "role": { "type": "string", "enum": ["tenant", "owner", "cleaner"], "description": "User primary role." },
+        "isEmailVerified": { "type": "boolean", "description": "Whether email has been verified." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Account registration timestamp." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last update timestamp." }
+      },
+      "required": ["id", "email", "fullName", "phone", "role", "createdAt"]
+    },
+    "Tenant": {
+      "title": "Tenant",
+      "description": "Specific profile and preferences for tenants (guests/renters).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The user UID (matches auth.uid)." },
+        "fullName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "city": { "type": "string" },
+        "preferredLanguage": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "fullName", "email", "phone", "city"]
+    },
+    "Owner": {
+      "title": "Owner",
+      "description": "Specific profile and commercial details for property owners and real estate offices.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The user UID (matches auth.uid)." },
+        "fullName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "ownerType": { "type": "string", "enum": ["individual", "office"] },
+        "officeName": { "type": "string" },
+        "identityOrCr": { "type": "string" },
+        "ownerCity": { "type": "string" },
+        "ibanOrAccount": { "type": "string" },
+        "contactMethod": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "fullName", "email", "phone", "ownerType", "identityOrCr", "ownerCity", "ibanOrAccount"]
+    },
+    "Cleaner": {
+      "title": "Cleaner",
+      "description": "Specific profile and service terms for cleaning service providers.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The user UID (matches auth.uid)." },
+        "fullName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "cleanerCity": { "type": "string" },
+        "coveredNeighborhoods": { "type": "string" },
+        "workHours": { "type": "string" },
+        "serviceType": { "type": "string" },
+        "experienceYears": { "type": "string" },
+        "pricing": { "type": "string" },
+        "idNumber": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "fullName", "email", "phone", "cleanerCity", "coveredNeighborhoods", "workHours", "serviceType", "pricing", "idNumber"]
+    },
+    "Property": {
+      "title": "Property",
+      "description": "Real estate property registered by an owner (hotel, residential building, furnished apartments, villas).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique Firestore document ID." },
+        "ownerId": { "type": "string", "description": "Owner UID who owns this property." },
+        "name": { "type": "string", "description": "Name of the property." },
+        "type": { "type": "string", "enum": ["hotel", "building", "apartments", "villa", "resort", "compound"], "description": "Property type category." },
+        "city": { "type": "string", "description": "City where the property is located." },
+        "district": { "type": "string", "description": "District or neighborhood." },
+        "address": { "type": "string", "description": "Detailed street address." },
+        "roomsCount": { "type": "number", "description": "Total number of rooms/units." },
+        "floorsCount": { "type": "number", "description": "Total number of floors." },
+        "smartLocksEnabled": { "type": "boolean", "description": "Whether smart digital locks are integrated." },
+        "contactPhone": { "type": "string", "description": "Property management contact phone." },
+        "description": { "type": "string", "description": "Overview of features and amenities." },
+        "status": { "type": "string", "enum": ["active", "inactive", "maintenance"], "description": "Operating status." },
+        "occupancyRate": { "type": "number", "description": "Occupancy rate percentage." },
+        "monthlyRevenue": { "type": "number", "description": "Estimated monthly revenue in SAR." },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "ownerId", "name", "type", "city", "roomsCount", "status", "createdAt"]
+    },
+    "EmailVerification": {
+      "title": "EmailVerification",
+      "description": "6-digit OTP verification records for user emails.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "otp": { "type": "string" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "attempts": { "type": "number" },
+        "verified": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "otp", "expiresAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "entity": "User",
+      "description": "Unified user record for auth verification and role lookup."
+    },
+    "/tenants/{userId}": {
+      "entity": "Tenant",
+      "description": "Tenant specific profile and booking preferences."
+    },
+    "/owners/{userId}": {
+      "entity": "Owner",
+      "description": "Property owner specific profile, legal ID/CR, and banking info."
+    },
+    "/cleaners/{userId}": {
+      "entity": "Cleaner",
+      "description": "Cleaning provider specific profile, services, and rates."
+    },
+    "/properties/{propertyId}": {
+      "entity": "Property",
+      "description": "Properties owned and managed by property owners."
+    },
+    "/email_verifications/{emailDoc}": {
+      "entity": "EmailVerification",
+      "description": "Temporary 6-digit OTP verification records."
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Best Smart Hospitality 2",
+  "description": "منظومة الضيافة وإدارة وتشغيل العقارات الذكية مدعومة بقاعدة بيانات Supabase وتوثيق الحسابات برموز OTP الآمنة.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
