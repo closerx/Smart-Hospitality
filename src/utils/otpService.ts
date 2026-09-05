@@ -636,21 +636,12 @@ export async function createAndSaveOTP(
     console.warn('Supabase OTP save error:', err);
   }
 
-  // Backup in sessionStorage for client resilience
+  // Backup hashed record in sessionStorage for client resilience
   try {
-    sessionStorage.setItem(`otp_${docId}`, JSON.stringify({
-      ...record,
-      plainOtp: otp
-    }));
+    sessionStorage.setItem(`otp_${docId}`, JSON.stringify(record));
   } catch {}
 
-  // Log in browser console for developers and instant testing
-  console.log(
-    `%c🔐 [SMART HOSPITALITY OTP] الرمز السري هو: ${otp} (لبريد: ${sanitizedEmail})`,
-    'background: #0B1B3D; color: #F1D28B; font-size: 14px; font-weight: bold; padding: 6px 14px; border-radius: 6px; border: 1px solid #F1D28B;'
-  );
-
-  // Trigger backend email delivery service via /api/send-otp with fast timeout
+  // Backend email delivery service via /api/send-otp
   let deliveryResult: { success: boolean; provider: string; message: string } | undefined;
   try {
     const controller = new AbortController();
